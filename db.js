@@ -1,4 +1,2 @@
 const mongoose = require('mongoose');
-
-
-mongoose.connect('mongodb://0.0.0.0/n16WhatClone')
+mongoose.connect(process.env.MONGO_URL);

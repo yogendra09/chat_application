@@ -204,7 +204,7 @@ io.on("connection", function (socket) {
             name: group.name
         })
 
-    })
+    });
 
 
 });

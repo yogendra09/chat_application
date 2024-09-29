@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const mongoStore = require('connect-mongo');
+require('dotenv').config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const userModel = require('./Model/user')
@@ -23,6 +24,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: 'sara',
+    cookie:{maxAge:1000*60*60*2},
+    store:mongoStore.create({
+      mongoUrl:process.env.MONGO_URL,
+      autoRemove:'disabled'
+    })
   })
 );
 app.use(passport.initialize());
