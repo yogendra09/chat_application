@@ -191,12 +191,14 @@ io.on("connection", function (socket) {
             name: joiningDetails.groupName
         })
 
+        if(!group) return;
+
         const currentUser = await user.findOne({
             username: joiningDetails.sender
         })
 
-        group.users.push(currentUser._id)
-
+        group?.users?.push(currentUser._id)
+        
         await group.save()
 
         socket.emit('group-joined', {

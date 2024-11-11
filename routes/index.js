@@ -10,7 +10,7 @@ passport.use(new localStrategy(users.authenticate()))
 router.post('/register', (req, res, next) => {
   var newUser = {
     //user data here
-    username: req.body.username
+    username: req.body.username,
     //user data here
   };
   users
