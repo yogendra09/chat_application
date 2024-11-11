@@ -26,7 +26,7 @@ router.post('/register', (req, res, next) => {
     });
 });
 
-router.get('/register', (req, res, next) => {
+router.get('/register', isNotAuthenticated, (req, res, next) => {
   res.render("register")
 })
 
@@ -38,13 +38,19 @@ router.post('/login',
   (req, res, next) => { }
 );
 
-router.get('/login', (req, res, next) => {
+router.get('/login', isNotAuthenticated, (req, res, next) => {
   res.render("login")
 })
 
 function isloggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   else res.redirect('/login');
+}
+function isNotAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return next(); // User is not logged in, proceed to route
+  }
+  res.redirect('/'); // User is logged in, redirect to home
 }
 
 router.get('/logout', (req, res, next) => {

@@ -38,6 +38,7 @@
     <div class="right hidden flex-1 flex flex-col">
       <div class="top p-4 bg-white border-b shadow-sm">
         <div id="currentChatUser" class="user flex items-center gap-3">
+          <span class="back-button md:hidden">←</span>
           <img src="..." alt="" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-sm">
           <h3 class="font-semibold text-gray-800 text-sm md:text-base">username</h3>
         </div>
@@ -148,15 +149,21 @@
 
     function createNewConversation(profileImage, username) {
       currentChatUser = username
-      document.querySelector('#main .right').style.display = 'initial'
+      const rightSection = document.querySelector('#main .right')
+      rightSection.classList.remove('hidden')
+      rightSection.classList.add('flex')
+      
+      // For mobile: hide the left section when chat is opened
+      if (window.innerWidth < 768) {
+        document.querySelector('#main .left').classList.add('hidden')
+      }
+      
       document.querySelector("#currentChatUser img").setAttribute('src', profileImage)
       document.querySelector("#currentChatUser h3").textContent = username
       socket.emit('fetch-conversation', {
         receiver: username,
-        /* insta */
-        sender: sender /* a */
+        sender: sender
       })
-
     }
 
     socket.on('send-conversation', allMessages => {
@@ -231,7 +238,6 @@
     @media (max-width: 768px) {
       .right {
         height: 100vh;
-        display: flex !important;
         position: fixed;
         top: 0;
         left: 0;
@@ -241,11 +247,37 @@
         background: white;
       }
 
-      .middle {
-        padding-bottom: 80px;
+      .right .top {
+        padding-left: 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      /* Update back button styles */
+      .back-button {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
       }
     }
   </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click event for back button
+      const backButton = document.querySelector('.back-button');
+      if (backButton) {
+        backButton.addEventListener('click', function() {
+          if (window.innerWidth < 768) {
+            document.querySelector('#main .right').classList.add('hidden');
+            document.querySelector('#main .right').classList.remove('flex');
+            document.querySelector('#main .left').classList.remove('hidden');
+          }
+        });
+      }
+    });
+  </script>
 
 </body>
 
